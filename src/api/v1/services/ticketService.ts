@@ -13,6 +13,11 @@ export const getAllTickets = (): Ticket[] => {
     return tickets;
 };
 
+export const getTicket = (id: number): Ticket | undefined => {
+    let ticket = tickets.find(x => x.id === id)
+    return ticket;
+};
+
 export const createTicketService = (newTicket: Ticket): Ticket => {
     tickets.push(newTicket)
     return newTicket;
