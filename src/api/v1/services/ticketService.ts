@@ -1,4 +1,4 @@
-import { tickets } from "src/data/ticketData"
+import { tickets } from "../../../data/ticketData"
 
 export interface Ticket {
     "id": number,
@@ -30,17 +30,29 @@ export const updateTicketService = (
         priority?: string,
         status?: string,
         createdAt?: string
-    ): string => {
-    return "Ticket Updated";
+    ): Ticket | undefined => {
+    let ticket = tickets.find(x => x.id === id);
+
+    if (!ticket) {
+        return undefined;
+    }
+
+    if (title !== undefined) ticket.title = title;
+    if (description !== undefined) ticket.description = description;
+    if (priority !== undefined) ticket.priority = priority;
+    if (status !== undefined) ticket.status = status;
+    if (createdAt !== undefined) ticket.createdAt = createdAt;
+    
+    return ticket;
 };
 
-export const deleteTicketService = (id: number) => {
+export const deleteTicketService = (id: number): string => {
     let ticketToDelete = tickets.findIndex(x => x.id === id);
 
-    if (-1) {
-        return;
+    if (ticketToDelete === -1) {
+        return "Ticket not found";
     }
 
     tickets.splice(ticketToDelete, 1)
-    return;
+    return "Ticket deleted";
 }
