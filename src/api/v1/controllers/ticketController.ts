@@ -36,9 +36,13 @@ export const getTicketUrgency = (req: Request, res: Response) => {
 };
 
 export const createTicket = (req: Request, res: Response) => {
-    let newTicket = req.body
+    let { title, description, priority } = req.body;
 
-    let result = createTicketService(newTicket)
+    if (!title) res.status(HTTP_STATUS.BAD_REQUEST).json({ error: "Missing required: title" });
+    if (!description) res.status(HTTP_STATUS.BAD_REQUEST).json({ error: "Missing required: description" });
+    if (!priority) res.status(HTTP_STATUS.BAD_REQUEST).json({ error: "Invalid priority. Must be one of: critical, high, medium, low" });
+
+    result = createTicketService(newTicket)
     res.status(HTTP_STATUS.CREATED).json({ message: result });
 };
 

@@ -78,7 +78,22 @@ export const getTicketUrgencyService = (id: number): any => {
     }
 }
 
-export const createTicketService = (newTicket: Ticket): Ticket => {
+export const createTicketService = (
+        title: string,
+        description: string,
+        priority: string
+    ): Ticket => {
+    let id = tickets.length + 1;
+    let createdAt = new Date().toISOString();
+    
+    const newTicket: Ticket = {
+        id: id,
+        title: title,
+        description: description,
+        priority: priority,
+        status: "open",
+        createdAt: createdAt,
+    }
     tickets.push(newTicket)
     return newTicket;
 };
