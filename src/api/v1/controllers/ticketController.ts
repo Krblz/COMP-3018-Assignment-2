@@ -63,6 +63,12 @@ export const updateTicket = (req: Request, res: Response) => {
     if (!isValidId(id, res)) {
         return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: "Id must be numerical" });
     }
+    if (!isValidPriority(priority, res)) {
+        return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: "Invalid priority. Must be one of: critical, high, medium, low" });
+    }
+    if (!isValidStatus(priority, res)) {
+        return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: "Invalid status. Must be one of: open, in-progress, resolved" });
+    }
 
     let result = updateTicketService(title, description, priority, status, createdAt);
     res.status(HTTP_STATUS.CREATED).json({ message: result });
@@ -101,6 +107,20 @@ function isValidId(id: number, res: Response): boolean {
 function isValidPriority(priority: string, res: Response): boolean {
     const validPriorities = ["critical", "high", "medium", "low"];
     if (!validPriorities.includes(priority)) {
+        return false;
+    }
+    return true
+}
+
+/**
+ * Function for validating Status
+ * @param status 
+ * @param res
+ * @returns boolean
+ */
+function isValidStatus(status: string, res: Response): boolean {
+    const validStatus = ["open", "in-progress", "resolved"];
+    if (!validStatus.includes(status)) {
         return false;
     }
     return true

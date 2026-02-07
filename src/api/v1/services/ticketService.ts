@@ -53,7 +53,7 @@ export const getTicketUrgencyService = (id: number): any => {
         urgencyScore = 0;
         urgencyLevel = "Minimal. Ticket resolved." 
     } 
-    else if (ticket.status === "open") {
+    else {
         urgencyScore = baseScore + (ticketAge[id] * 5);
         urgencyLevel = urgencyScore <= 25 ?
                             "Low urgency. Address when capacity allows.":
