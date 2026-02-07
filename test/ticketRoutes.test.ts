@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../src/api";
+import app from "../src/app";
 import * as ticketController from "../src/api/v1/controllers/ticketController";
 
 jest.mock("../src/api/v1/controllers/ticketController", () => ({
@@ -45,7 +45,7 @@ describe("Ticket API Endpoints", () => {
     });
 
     it("should call deleteTicket controller", async () => {
-        await request(app).delete("/api/v1/events/7");
+        await request(app).delete("/api/v1/tickets/7");
 
         expect(ticketController.deleteTicket).toHaveBeenCalled();
     });
