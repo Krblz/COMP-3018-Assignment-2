@@ -9,6 +9,26 @@ export interface Ticket {
     "createdAt": string
 }
 
+const urgencyBaseScore = (
+    type: "critical" | "high" | "medium" | "low"
+): number => {
+    switch (type) {
+        case "critical":
+            return 50;
+        case "high":
+            return 30;
+        case "medium":
+            return 20;
+        case "low":
+            return 10;
+        default:
+            return 0;
+    }
+};
+
+// Array for Ticket Age, Array Starts at 0, Ticket Data starts at 1
+const ticketAge: number[] = [0, 3, 2, 6, 5, 9, 6, 10];
+
 export const getAllTicketsService = (): Ticket[] => {
     return tickets;
 };
@@ -17,6 +37,46 @@ export const getTicketService = (id: number): Ticket | undefined => {
     let ticket = tickets.find(x => x.id === id)
     return ticket;
 };
+
+export const getTicketUrgencyService = (id: number): any => {
+    let ticket = tickets.find(x => x.id === id);
+    let urgencyScore;
+    let urgencyLevel;
+
+    if (!ticket) {
+        return undefined;
+    }
+
+    let baseScore = urgencyBaseScore(ticket.priority as "critical" | "high" | "medium" | "low");
+
+    if (ticket.status === "resolved") {
+        urgencyScore = 0;
+        urgencyLevel = "Minimal. Ticket resolved." 
+    } 
+    else if (ticket.status === "open") {
+        urgencyScore = baseScore + (ticketAge[id] * 5);
+        urgencyLevel = urgencyScore <= 25 ?
+                            "Low urgency. Address when capacity allows.":
+                        urgencyScore <= 50 ?
+                            "Moderate. Schedule for attention.":
+                        urgencyScore <= 75 ?
+                            "High urgency. Prioritize resolution.":
+                        // urgencyScore is higher than 80
+                        "High urgency. Prioritize resolution.";
+    }
+
+    return {
+        id: ticket.id,
+        title: ticket.title,
+        description: ticket.description,
+        priority: ticket.priority,
+        status: ticket.status,
+        createdAt: ticket.createdAt,
+        ticketAge: ticketAge[id],
+        urgencyScore: urgencyScore,
+        urgencyLevel: urgencyLevel
+    }
+}
 
 export const createTicketService = (newTicket: Ticket): Ticket => {
     tickets.push(newTicket)
