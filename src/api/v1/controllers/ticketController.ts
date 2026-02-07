@@ -4,7 +4,7 @@ import {HTTP_STATUS} from "../../../constants/httpConstants"
 
 export const getAllTickets = (req: Request, res: Response) => {
     let result = getAllTicketsService()
-    res.status(HTTP_STATUS.OK).json({ message: result });
+    res.status(HTTP_STATUS.OK).json({ message: "Tickets retrieved", data: result });
 };
 
 export const getTicket = (req: Request, res: Response) => {
