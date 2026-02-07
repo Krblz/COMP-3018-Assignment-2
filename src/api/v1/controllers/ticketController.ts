@@ -4,19 +4,14 @@ import { HTTP_STATUS } from "src/constants/httpConstants";
 
 
 export const getAllTickets = (req: Request, res: Response) => {
-    // Logic to get all tickets
     let result = getAllTicketsService()
-     res.status(HTTP_STATUS.OK).json(result);
+    res.status(HTTP_STATUS.OK).json(result);
 };
 
 export const getTicket = (req: Request, res: Response) => {
-    // Logic to get one ticket
     let id = Number(req.params.id) 
 
-    if (Number.isNaN(id)) {
-        res.status(HTTP_STATUS.BAD_REQUEST).json({ error: "Id must be numerical" });
-        return;
-    }
+    isValidId(id, res)
 
     let result = getTicketService(id)
 
@@ -28,16 +23,34 @@ export const getTicket = (req: Request, res: Response) => {
 };
 
 export const createTicket = (req: Request, res: Response) => {
-    // Logic to create a new ticket
-    res.status(201).send("Create a new ticket");
+    let newTicket = req.body
+
+    let result = createTicketService(newTicket)
+    res.status(HTTP_STATUS.CREATED).json(result);
 };
 
 export const updateTicket = (req: Request, res: Response) => {
-    // Logic to update an ticket
-    res.status(200).send("Update an ticket");
+    let id = Number(req.params.id);
+    let { title, description, priority, status, createdAt } = req.body;
+
+    isValidId(id, res)
+
+    let result = updateTicketService(title, description, priority, status, createdAt);
+    res.status(HTTP_STATUS.CREATED).json(result);
 };
 
 export const deleteTicket = (req: Request, res: Response) => {
-    // Logic to delete an ticket
-    res.status(200).send("Delete an ticket");
+    let id = Number(req.params.id);
+
+    isValidId(id, res)
+
+    let result = deleteTicketService(id);
+    res.status(HTTP_STATUS.OK).json(result);
 };
+
+function isValidId(id: number, res: Response): any {
+    if (Number.isNaN(id)) {
+        res.status(HTTP_STATUS.BAD_REQUEST).json({ error: "Id must be numerical" });
+        return;
+    }
+}
