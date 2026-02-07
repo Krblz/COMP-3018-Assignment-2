@@ -10,7 +10,7 @@ export const getAllTickets = (req: Request, res: Response) => {
 export const getTicket = (req: Request, res: Response) => {
     let id = Number(req.params.id) 
 
-    if (!isValidId(id, res)) {
+    if (!isValidId(id)) {
         return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: "Id must be numerical" });
     }
 
@@ -26,7 +26,7 @@ export const getTicket = (req: Request, res: Response) => {
 export const getTicketUrgency = (req: Request, res: Response) => {
     let id = Number(req.params.id) 
 
-    if (!isValidId(id, res)) {
+    if (!isValidId(id)) {
         return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: "Id must be numerical" });
     }
 
@@ -48,7 +48,7 @@ export const createTicket = (req: Request, res: Response) => {
     if (!description) {
         return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: "Missing required: description" });
     }
-    if (!isValidPriority(priority, res)) {
+    if (!isValidPriority(priority)) {
         return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: "Invalid priority. Must be one of: critical, high, medium, low" });
     }
 
@@ -60,24 +60,29 @@ export const updateTicket = (req: Request, res: Response) => {
     let id = Number(req.params.id);
     let { title, description, priority, status, createdAt } = req.body;
 
-    if (!isValidId(id, res)) {
+    if (!isValidId(id)) {
         return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: "Id must be numerical" });
     }
-    if (!isValidPriority(priority, res)) {
+    if (priority !== undefined && !isValidPriority(priority)) {
         return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: "Invalid priority. Must be one of: critical, high, medium, low" });
     }
-    if (!isValidStatus(priority, res)) {
+    if (status !== undefined && !isValidStatus(status)) {
         return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: "Invalid status. Must be one of: open, in-progress, resolved" });
     }
 
-    let result = updateTicketService(title, description, priority, status, createdAt);
+    let result = updateTicketService(id, title, description, priority, status, createdAt);
+
+    if (result === undefined) {
+        res.status(HTTP_STATUS.NOT_FOUND).json({ error: `Ticket not found` });
+    }
+
     res.status(HTTP_STATUS.CREATED).json({ message: result });
 };
 
 export const deleteTicket = (req: Request, res: Response) => {
     let id = Number(req.params.id);
 
-    if (!isValidId(id, res)) {
+    if (!isValidId(id)) {
         return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: "Id must be numerical" });
     }
 
@@ -91,7 +96,7 @@ export const deleteTicket = (req: Request, res: Response) => {
  * @param res 
  * @returns boolean
  */
-function isValidId(id: number, res: Response): boolean {
+function isValidId(id: number): boolean {
     if (Number.isNaN(id)) {
         return false;
     }
@@ -104,7 +109,7 @@ function isValidId(id: number, res: Response): boolean {
  * @param res
  * @returns boolean
  */
-function isValidPriority(priority: string, res: Response): boolean {
+function isValidPriority(priority: string): boolean {
     const validPriorities = ["critical", "high", "medium", "low"];
     if (!validPriorities.includes(priority)) {
         return false;
@@ -118,7 +123,7 @@ function isValidPriority(priority: string, res: Response): boolean {
  * @param res
  * @returns boolean
  */
-function isValidStatus(status: string, res: Response): boolean {
+function isValidStatus(status: string): boolean {
     const validStatus = ["open", "in-progress", "resolved"];
     if (!validStatus.includes(status)) {
         return false;
