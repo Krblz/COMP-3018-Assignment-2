@@ -31,7 +31,7 @@ export const getAllTicketsService = (): Ticket[] => {
 };
 
 export const getTicketService = (id: number): Ticket | undefined => {
-    let ticket = tickets.find(x => x.id === id)
+    let ticket = tickets.find(x => x.id === id);
     return ticket;
 };
 
