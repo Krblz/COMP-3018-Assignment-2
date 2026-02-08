@@ -1,4 +1,4 @@
-import { tickets } from "../../../data/ticketData"
+import { tickets, ticketAge } from "../../../data/ticketData"
 
 export interface Ticket {
     "id": number,
@@ -25,9 +25,6 @@ const urgencyBaseScore = (
             return 0;
     }
 };
-
-// Array for Ticket Age, Array Starts at 0, Ticket Data starts at 1
-const ticketAge: number[] = [0, 3, 2, 6, 5, 9, 6, 10];
 
 export const getAllTicketsService = (): Ticket[] => {
     return tickets;
@@ -62,7 +59,7 @@ export const getTicketUrgencyService = (id: number): any => {
                         urgencyScore <= 75 ?
                             "High urgency. Prioritize resolution.":
                         // urgencyScore is higher than 80
-                        "High urgency. Prioritize resolution.";
+                        "Critical. Immediate attention required.";
     }
 
     return {

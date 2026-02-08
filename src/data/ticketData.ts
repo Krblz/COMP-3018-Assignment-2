@@ -1,5 +1,8 @@
 import { Ticket } from "../api/v1/services/ticketService"
 
+// Array for Ticket Age, Array Starts at 0, Ticket Data starts at 1
+export const ticketAge: number[] = [0, 3, 2, 6, 5, 9, 6, 10];
+
 export const tickets: Ticket[] = [
     {
         "id": 1,
