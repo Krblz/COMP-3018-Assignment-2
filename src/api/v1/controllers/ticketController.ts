@@ -76,7 +76,7 @@ export const updateTicket = (req: Request, res: Response) => {
         res.status(HTTP_STATUS.NOT_FOUND).json({ error: `Ticket not found` });
     }
 
-    res.status(HTTP_STATUS.CREATED).json({ message: result });
+    res.status(HTTP_STATUS.OK).json({ message: result });
 };
 
 export const deleteTicket = (req: Request, res: Response) => {
