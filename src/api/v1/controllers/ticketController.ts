@@ -87,7 +87,12 @@ export const deleteTicket = (req: Request, res: Response) => {
     }
 
     let result = deleteTicketService(id);
-    res.status(HTTP_STATUS.OK).json({ message: result });
+    if (result) {
+        res.status(HTTP_STATUS.OK).json({ message: "Ticket deleted" });
+    }
+    else {
+        res.status(HTTP_STATUS.NOT_FOUND).json({ message: "Ticket not found" });
+    }
 };
 
 /**

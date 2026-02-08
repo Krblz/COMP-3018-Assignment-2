@@ -121,13 +121,13 @@ export const updateTicketService = (
     return ticket;
 };
 
-export const deleteTicketService = (id: number): string => {
+export const deleteTicketService = (id: number): boolean => {
     let ticketToDelete = tickets.findIndex(x => x.id === id);
 
     if (ticketToDelete === -1) {
-        return "Ticket not found";
+        return false;
     }
 
     tickets.splice(ticketToDelete, 1)
-    return "Ticket deleted";
+    return true;
 }
